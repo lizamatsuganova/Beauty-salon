@@ -94,3 +94,101 @@ th {
   background-color: white;
   color: #80405e;
 }
+
+
+.app {
+  min-height: 100vh;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #f4dce7;
+}
+
+.site-logo {
+  color: #a64d79;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 25px;
+}
+
+.site-nav a, .demo-link {
+  color: #a64d79;
+  text-decoration: none;
+}
+
+.site-nav a:hover, .demo-link:hover {
+  text-decoration: underline;
+}
+
+.about-page, .login-page {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.about-hero, .about-card, .login-card {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: white;
+  border-radius: 10px;
+}
+
+.about-hero, .login-card {
+  text-align: center;
+}
+
+.about-icon, .login-icon {
+  font-size: 35px;
+}
+
+.about-card h2 {
+  color: #a64d79;
+}
+
+.about-footer {
+  text-align: center;
+}
+
+.login-card {
+  max-width: 400px;
+  margin: 30px auto;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-button {
+  padding: 10px;
+  background: #d985a8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-subtitle, .login-note {
+  color: #98758a;
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .site-nav {
+    gap: 12px;
+  }
+}
