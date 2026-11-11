@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import masters from '../masters'
+import Spinner from './Spinner'
 
 const emptyForm = {
   serviceName: '',
@@ -12,6 +13,12 @@ const emptyForm = {
 
 function AppointmentForm({ onAddAppointment }) {
   const [form, setForm] = useState(emptyForm)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const submitTimeout = useRef(null)
+
+  useEffect(() => {
+    return () => window.clearTimeout(submitTimeout.current)
+  }, [])
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -20,6 +27,8 @@ function AppointmentForm({ onAddAppointment }) {
 
   function handleSubmit(event) {
     event.preventDefault()
+
+    if (isSubmitting) return
 
     if (
       !form.serviceName ||
@@ -33,8 +42,13 @@ function AppointmentForm({ onAddAppointment }) {
       return
     }
 
-    onAddAppointment(form)
-    setForm(emptyForm)
+    setIsSubmitting(true)
+
+    submitTimeout.current = window.setTimeout(() => {
+      onAddAppointment(form)
+      setForm(emptyForm)
+      setIsSubmitting(false)
+    }, 500)
   }
 
   return (
@@ -48,6 +62,7 @@ function AppointmentForm({ onAddAppointment }) {
             name="serviceName"
             value={form.serviceName}
             onChange={handleChange}
+            disabled={isSubmitting}
           />
         </label>
         <label>
@@ -58,6 +73,7 @@ function AppointmentForm({ onAddAppointment }) {
             name="duration"
             value={form.duration}
             onChange={handleChange}
+            disabled={isSubmitting}
           />
         </label>
         <label>
@@ -69,6 +85,7 @@ function AppointmentForm({ onAddAppointment }) {
             name="price"
             value={form.price}
             onChange={handleChange}
+            disabled={isSubmitting}
           />
         </label>
       </div>
@@ -82,6 +99,7 @@ function AppointmentForm({ onAddAppointment }) {
             name="clientName"
             value={form.clientName}
             onChange={handleChange}
+            disabled={isSubmitting}
           />
         </label>
         <label>
@@ -91,31 +109,44 @@ function AppointmentForm({ onAddAppointment }) {
             name="clientPhone"
             value={form.clientPhone}
             onChange={handleChange}
+            disabled={isSubmitting}
           />
         </label>
       </div>
 
       <div className="form-group">
         <span className="form-legend">Мастер</span>
-  <label>
-        Имя
-        <select
-        name="masterName"
-        value={form.masterName}
-        onChange={handleChange}
-        >
-        <option value="">Выберите мастера</option>
-        {masters.map((master) => (
-         <option key={master} value={master}>
-          {master}
-        </option>
-      ))}
-    </select>
-  </label>
+        <label>
+          Имя
+          <select
+            name="masterName"
+            value={form.masterName}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          >
+            <option value="">Выберите мастера</option>
+            {masters.map((master) => (
+              <option key={master} value={master}>
+                {master}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
-      <button type="submit" className="add-btn">
-        Добавить запись
+      <button
+        type="submit"
+        className="add-btn"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <>
+            <Spinner label="Добавляем запись" />
+            Добавляем...
+          </>
+        ) : (
+          'Добавить запись'
+        )}
       </button>
     </form>
   )
