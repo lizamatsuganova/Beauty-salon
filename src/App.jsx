@@ -3,11 +3,14 @@ import Login from './pages/Login'
 import Appointments from './pages/Appointments'
 import About from './pages/About'
 import './App.css'
+import { Provider } from 'react-redux'
+import store from './store/store'
 
 function App() {
   return (
-    <div className="app">
-      <header className="site-header">
+    <Provider store={store}>
+      <div className="app">
+        <header className="site-header">
         <Link to="/about" className="site-logo">
           BeautySalon
         </Link>
@@ -27,7 +30,8 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
-    </div>
+      </div>
+    </Provider>
   )
 }
 

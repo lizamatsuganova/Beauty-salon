@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import masters from '../masters'
+import { useDispatch, useSelector } from 'react-redux'
+import { showMasters } from '../store/actions/mastersActions'
 import Spinner from './Spinner'
 
 const emptyForm = {
@@ -16,13 +17,32 @@ function AppointmentForm({ onAddAppointment }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const submitTimeout = useRef(null)
 
+  const dispatch = useDispatch()
+
+  const {
+    masters,
+    loading: mastersLoading,
+    loaded: mastersLoaded,
+    error: mastersError,
+  } = useSelector((state) => state.masters)
+
+  useEffect(() => {
+    if (!mastersLoaded && !mastersLoading) {
+      dispatch(showMasters())
+    }
+  }, [dispatch, mastersLoaded, mastersLoading])
+
   useEffect(() => {
     return () => window.clearTimeout(submitTimeout.current)
   }, [])
 
   function handleChange(event) {
     const { name, value } = event.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   function handleSubmit(event) {
@@ -55,6 +75,7 @@ function AppointmentForm({ onAddAppointment }) {
     <form className="appointment-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <span className="form-legend">Услуга</span>
+
         <label>
           Название
           <input
@@ -65,6 +86,7 @@ function AppointmentForm({ onAddAppointment }) {
             disabled={isSubmitting}
           />
         </label>
+
         <label>
           Длительность
           <input
@@ -76,6 +98,7 @@ function AppointmentForm({ onAddAppointment }) {
             disabled={isSubmitting}
           />
         </label>
+
         <label>
           Стоимость
           <input
@@ -92,6 +115,7 @@ function AppointmentForm({ onAddAppointment }) {
 
       <div className="form-group">
         <span className="form-legend">Клиент</span>
+
         <label>
           Имя
           <input
@@ -102,6 +126,7 @@ function AppointmentForm({ onAddAppointment }) {
             disabled={isSubmitting}
           />
         </label>
+
         <label>
           Телефон
           <input
@@ -116,15 +141,21 @@ function AppointmentForm({ onAddAppointment }) {
 
       <div className="form-group">
         <span className="form-legend">Мастер</span>
+
         <label>
           Имя
           <select
             name="masterName"
             value={form.masterName}
             onChange={handleChange}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !mastersLoaded}
           >
-            <option value="">Выберите мастера</option>
+            <option value="">
+              {mastersLoading
+                ? 'Загрузка мастеров...'
+                : 'Выберите мастера'}
+            </option>
+
             {masters.map((master) => (
               <option key={master} value={master}>
                 {master}
@@ -132,6 +163,8 @@ function AppointmentForm({ onAddAppointment }) {
             ))}
           </select>
         </label>
+
+        {mastersError && <p>{mastersError}</p>}
       </div>
 
       <button
