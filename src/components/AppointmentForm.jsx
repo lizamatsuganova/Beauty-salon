@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import masters from '../masters'
 
 const emptyForm = {
   serviceName: '',
@@ -96,19 +97,21 @@ function AppointmentForm({ onAddAppointment }) {
 
       <div className="form-group">
         <span className="form-legend">Мастер</span>
-        <label>
-          Имя
-          <select
-            name="masterName"
-            value={form.masterName}
-            onChange={handleChange}
-          >
-            <option value="">Выберите мастера</option>
-            <option value="Барсукова Анна">Барсукова Анна</option>
-            <option value="Чибрикова Яна">Чибрикова Яна</option>
-            <option value="Столбова Александра">Столбова Александра</option>
-          </select>
-        </label>
+  <label>
+        Имя
+        <select
+        name="masterName"
+        value={form.masterName}
+        onChange={handleChange}
+        >
+        <option value="">Выберите мастера</option>
+        {masters.map((master) => (
+         <option key={master} value={master}>
+          {master}
+        </option>
+      ))}
+    </select>
+  </label>
       </div>
 
       <button type="submit" className="add-btn">
