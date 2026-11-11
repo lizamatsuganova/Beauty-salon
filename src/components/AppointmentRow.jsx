@@ -1,4 +1,4 @@
-function AppointmentRow({ appointment, rowNumber }) {
+function AppointmentRow({ appointment, rowNumber, onDeleteAppointment }) {
   return (
     <tr>
       <td>{rowNumber}</td>
@@ -9,7 +9,11 @@ function AppointmentRow({ appointment, rowNumber }) {
       <td>{appointment.clientPhone}</td>
       <td>{appointment.masterName}</td>
       <td>
-        <button type="button" className="delete-btn">
+        <button
+          type="button"
+          className="delete-btn"
+          onClick={() => onDeleteAppointment(appointment.id)}
+        >
           Удалить
         </button>
       </td>

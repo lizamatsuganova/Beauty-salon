@@ -16,14 +16,22 @@ function AppointmentTable({ appointments, onDeleteAppointment }) {
         </tr>
       </thead>
       <tbody>
-        {appointments.map((appointment, index) => (
-          <AppointmentRow
-            key={appointment.id}
-            appointment={appointment}
-            rowNumber={index + 1}
-            onDeleteAppointment={onDeleteAppointment}
-          />
-        ))}
+        {appointments.length === 0 ? (
+          <tr>
+            <td colSpan="8" style={{ textAlign: 'center' }}>
+              Пока нет ни одной записи
+            </td>
+          </tr>
+        ) : (
+          appointments.map((appointment, index) => (
+            <AppointmentRow
+              key={appointment.id}
+              appointment={appointment}
+              rowNumber={index + 1}
+              onDeleteAppointment={onDeleteAppointment}
+            />
+          ))
+        )}
       </tbody>
     </table>
   )
